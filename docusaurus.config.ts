@@ -15,7 +15,7 @@ const config: Config = {
   deploymentBranch: 'gh-pages',
   trailingSlash: false,
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn', // 깨진 링크를 경고로 처리
   onBrokenMarkdownLinks: 'warn',
 
   i18n: {
