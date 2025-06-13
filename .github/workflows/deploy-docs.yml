@@ -1,0 +1,442 @@
+# .github/workflows/deploy-docs.yml
+name: Deploy Docusaurus Documentation
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'docs/**'
+      - 'src/**'
+      - 'static/**'
+      - 'docusaurus.config.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'yarn.lock'
+      - '.github/workflows/deploy-docs.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'src/**'
+      - 'static/**'
+      - 'docusaurus.config.js'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'github-pages'
+        type: choice
+        options:
+          - github-pages
+          - netlify
+          - vercel
+          - custom
+      build_type:
+        description: 'Build type'
+        required: false
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - development
+          - preview
+      clear_cache:
+        description: 'Clear build cache'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  NODE_VERSION: '18'
+  DEPLOYMENT_BRANCH: gh-pages
+
+# GitHub Pages 배포를 위한 동시성 제어
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # 🏗️ Build Job
+  build:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    outputs:
+      deployment-url: ${{ steps.deployment.outputs.page_url }}
+      cache-hit: ${{ steps.cache.outputs.cache-hit }}
+
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 전체 히스토리 (git-based last modified 지원)
+
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'  # 또는 'yarn'
+
+    - name: 🔧 Setup Pages (GitHub Pages 배포시)
+      if: github.event.inputs.environment == 'github-pages' || (github.event.inputs.environment == '' && github.event_name == 'push')
+      uses: actions/configure-pages@v4
+
+    - name: 💾 Cache dependencies
+      id: cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          node_modules
+          .docusaurus
+          ~/.npm
+        key: ${{ runner.os }}-docusaurus-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-docusaurus-
+
+    - name: 🧹 Clear cache (if requested)
+      if: github.event.inputs.clear_cache == 'true'
+      run: |
+        echo "🧹 Clearing build cache..."
+        rm -rf node_modules .docusaurus build
+        npm cache clean --force
+
+    - name: 📥 Install dependencies
+      run: |
+        echo "📥 Installing dependencies..."
+        npm ci --prefer-offline --no-audit
+
+    - name: 🔍 Verify Docusaurus config
+      run: |
+        echo "🔍 Verifying Docusaurus configuration..."
+        if [[ ! -f "docusaurus.config.js" ]]; then
+          echo "❌ docusaurus.config.js not found!"
+          exit 1
+        fi
+        
+        echo "✅ Configuration file found"
+        
+        # 설정 파일 검증
+        node -e "
+        try {
+          const config = require('./docusaurus.config.js');
+          console.log('✅ Configuration valid');
+          console.log('📄 Site title:', config.title);
+          console.log('🌐 Base URL:', config.baseUrl);
+          console.log('🔗 URL:', config.url);
+        } catch (error) {
+          console.error('❌ Configuration error:', error.message);
+          process.exit(1);
+        }
+        "
+
+    - name: 🏗️ Build documentation
+      env:
+        NODE_ENV: ${{ github.event.inputs.build_type || 'production' }}
+        CI: true
+      run: |
+        echo "🏗️ Building Docusaurus documentation..."
+        echo "Environment: $NODE_ENV"
+        echo "Build type: ${{ github.event.inputs.build_type || 'production' }}"
+        
+        # 빌드 시작 시간 기록
+        start_time=$(date +%s)
+        
+        # Docusaurus 빌드 실행
+        npm run build -- --out-dir build
+        
+        # 빌드 완료 시간 계산
+        end_time=$(date +%s)
+        build_duration=$((end_time - start_time))
+        
+        echo "✅ Build completed in ${build_duration} seconds"
+        
+        # 빌드 결과 검증
+        if [[ ! -d "build" ]]; then
+          echo "❌ Build directory not found!"
+          exit 1
+        fi
+        
+        # 빌드 통계
+        echo "📊 Build Statistics:"
+        echo "  📁 Total files: $(find build -type f | wc -l)"
+        echo "  📏 Total size: $(du -sh build | cut -f1)"
+        echo "  🗂️ HTML files: $(find build -name "*.html" | wc -l)"
+        echo "  🎨 CSS files: $(find build -name "*.css" | wc -l)"
+        echo "  📜 JS files: $(find build -name "*.js" | wc -l)"
+
+    - name: 🧪 Test built site
+      run: |
+        echo "🧪 Testing built documentation..."
+        
+        # 필수 파일 검증
+        required_files=(
+          "build/index.html"
+          "build/404.html"
+        )
+        
+        for file in "${required_files[@]}"; do
+          if [[ -f "$file" ]]; then
+            echo "✅ Found: $file"
+          else
+            echo "❌ Missing: $file"
+            exit 1
+          fi
+        done
+        
+        # HTML 파일 유효성 검사 (기본적인)
+        html_files=$(find build -name "*.html" | head -5)
+        for html_file in $html_files; do
+          if grep -q "</html>" "$html_file"; then
+            echo "✅ Valid HTML: $(basename $html_file)"
+          else
+            echo "⚠️  Potentially invalid HTML: $(basename $html_file)"
+          fi
+        done
+
+    - name: 📤 Upload GitHub Pages artifact
+      if: github.event.inputs.environment == 'github-pages' || (github.event.inputs.environment == '' && github.event_name == 'push')
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: build
+
+    - name: 📤 Upload build artifacts (for other deployments)
+      if: github.event.inputs.environment != 'github-pages' && github.event_name != 'push'
+      uses: actions/upload-artifact@v4
+      with:
+        name: docusaurus-build-${{ github.sha }}
+        path: build/
+        retention-days: 30
+
+    - name: 📋 Generate build summary
+      run: |
+        echo "## 📚 Documentation Build Summary" >> $GITHUB_STEP_SUMMARY
+        echo "**Build Time:** $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "**Node.js Version:** ${{ env.NODE_VERSION }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Environment:** ${{ github.event.inputs.build_type || 'production' }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Cache Hit:** ${{ steps.cache.outputs.cache-hit }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📊 Build Statistics" >> $GITHUB_STEP_SUMMARY
+        echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+        echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Total Files | $(find build -type f | wc -l) |" >> $GITHUB_STEP_SUMMARY
+        echo "| Total Size | $(du -sh build | cut -f1) |" >> $GITHUB_STEP_SUMMARY
+        echo "| HTML Files | $(find build -name "*.html" | wc -l) |" >> $GITHUB_STEP_SUMMARY
+        echo "| CSS Files | $(find build -name "*.css" | wc -l) |" >> $GITHUB_STEP_SUMMARY
+        echo "| JS Files | $(find build -name "*.js" | wc -l) |" >> $GITHUB_STEP_SUMMARY
+
+  # 🚀 GitHub Pages Deployment
+  deploy-github-pages:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build
+    if: |
+      (github.event.inputs.environment == 'github-pages' || 
+       (github.event.inputs.environment == '' && github.event_name == 'push')) &&
+      github.ref == 'refs/heads/main'
+    timeout-minutes: 10
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+    - name: 🚀 Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+    - name: 📝 Create deployment summary
+      run: |
+        echo "## 🚀 GitHub Pages Deployment" >> $GITHUB_STEP_SUMMARY
+        echo "**Deployment URL:** ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Deployment Time:** $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "**Status:** ✅ Successful" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "🎉 **Documentation is now live!**" >> $GITHUB_STEP_SUMMARY
+
+  # 🌐 Netlify Deployment (선택적)
+  deploy-netlify:
+    name: Deploy to Netlify
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event.inputs.environment == 'netlify'
+    timeout-minutes: 10
+
+    steps:
+    - name: 📥 Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: docusaurus-build-${{ github.sha }}
+        path: build
+
+    - name: 🚀 Deploy to Netlify
+      uses: nwtgck/actions-netlify@v3.0
+      with:
+        publish-dir: './build'
+        production-branch: main
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        deploy-message: |
+          Deploy from GitHub Actions
+          Commit: ${{ github.sha }}
+          Branch: ${{ github.ref_name }}
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+  # ▲ Vercel Deployment (선택적)
+  deploy-vercel:
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event.inputs.environment == 'vercel'
+    timeout-minutes: 10
+
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+
+    - name: 📥 Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: docusaurus-build-${{ github.sha }}
+        path: build
+
+    - name: 🚀 Deploy to Vercel
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        working-directory: ./build
+
+  # 🧪 PR Preview (Pull Request용)
+  pr-preview:
+    name: PR Preview Build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    timeout-minutes: 15
+
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: 📥 Install dependencies
+      run: npm ci --prefer-offline --no-audit
+
+    - name: 🏗️ Build for preview
+      env:
+        NODE_ENV: development
+      run: |
+        echo "🏗️ Building PR preview..."
+        npm run build
+
+    - name: 📝 Comment on PR
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+          
+          // 빌드 통계 수집
+          const buildDir = 'build';
+          const files = fs.readdirSync(buildDir, { recursive: true });
+          const htmlFiles = files.filter(f => f.endsWith('.html')).length;
+          const totalSize = require('child_process')
+            .execSync(`du -sh ${buildDir}`)
+            .toString()
+            .split('\t')[0];
+          
+          const comment = `## 📚 Documentation Preview
+          
+          ✅ **Build Status:** Successful
+          📊 **Build Stats:**
+          - HTML Pages: ${htmlFiles}
+          - Total Size: ${totalSize}
+          - Node.js: ${{ env.NODE_VERSION }}
+          
+          🔍 **Changes in this PR:**
+          - Documentation updates detected
+          - Build completed successfully
+          - Ready for review
+          
+          > 📝 This preview build validates that the documentation builds correctly with your changes.`;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+  # 🔍 Health Check (배포 후)
+  health-check:
+    name: Post-Deployment Health Check
+    runs-on: ubuntu-latest
+    needs: [deploy-github-pages]
+    if: success() && github.ref == 'refs/heads/main'
+    timeout-minutes: 5
+
+    steps:
+    - name: 🔍 Health check
+      run: |
+        echo "🔍 Performing health check..."
+        
+        # GitHub Pages URL (실제 URL로 변경 필요)
+        SITE_URL="${{ needs.build.outputs.deployment-url }}"
+        
+        if [[ -z "$SITE_URL" ]]; then
+          echo "⚠️  Deployment URL not available, skipping health check"
+          exit 0
+        fi
+        
+        echo "🌐 Checking: $SITE_URL"
+        
+        # HTTP 상태 체크 (최대 5번 재시도)
+        for i in {1..5}; do
+          echo "🔄 Attempt $i/5..."
+          
+          response=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" || echo "000")
+          
+          if [[ "$response" == "200" ]]; then
+            echo "✅ Health check passed! Site is responding correctly."
+            
+            # 간단한 콘텐츠 검증
+            if curl -s "$SITE_URL" | grep -q "SimpleEnvs"; then
+              echo "✅ Content validation passed!"
+            else
+              echo "⚠️  Content validation failed - SimpleEnvs not found in homepage"
+            fi
+            
+            break
+          else
+            echo "❌ Health check failed with response code: $response"
+            if [[ $i -eq 5 ]]; then
+              echo "❌ Max retries reached. Site may not be ready yet."
+              exit 1
+            fi
+            sleep 30
+          fi
+        done
+
+    - name: 📝 Update deployment status
+      if: always()
+      run: |
+        echo "## 🏥 Health Check Results" >> $GITHUB_STEP_SUMMARY
+        echo "**Check Time:** $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "**Site URL:** ${{ needs.build.outputs.deployment-url }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Status:** ${{ job.status == 'success' && '✅ Healthy' || '❌ Issues Detected' }}" >> $GITHUB_STEP_SUMMARY
