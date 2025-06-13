@@ -1,0 +1,543 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+/* CSS Variables for consistent theming */
+:root {
+  --simpleenvs-primary: #2e8555;
+  --simpleenvs-secondary: #25c2a0;
+  --simpleenvs-performance: #25c2a0;
+  --simpleenvs-security: #2980B9;
+  --simpleenvs-gradient: linear-gradient(135deg, #2e8555 0%, #25c2a0 100%);
+  --simpleenvs-border: #e5e5e5;
+  --simpleenvs-text-light: #666;
+}
+
+/* Dark mode CSS variables */
+[data-theme='dark'] {
+  --simpleenvs-border: #21262d;
+  --simpleenvs-text-light: #8b949e;
+  --ifm-background-color: #0f0f0f;
+  --ifm-background-surface-color: #1a1a1a;
+}
+
+/* Base transition for smooth theme switching */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+html {
+  transition: background-color 0.3s ease;
+}
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--simpleenvs-gradient);
+  color: white;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.performanceHighlight {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #FFD700;
+  margin: 2rem 0 1rem 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.performanceDetails {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0 2rem 0;
+  flex-wrap: wrap;
+}
+
+.performanceDetails .performance-badge,
+.performanceDetails .security-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.performanceDetails .performance-badge {
+  background: linear-gradient(45deg, #25c2a0, #2ECC71);
+  color: white;
+}
+
+.performanceDetails .security-badge {
+  background: linear-gradient(45deg, #2980B9, #3498DB);
+  color: white;
+}
+
+.performanceDetails .performance-badge:hover,
+.performanceDetails .security-badge:hover {
+  transform: translateY(-2px);
+}
+
+/* Dark mode badge improvements */
+[data-theme='dark'] .performanceDetails .performance-badge {
+  background: linear-gradient(45deg, #1a8870, #29d5b0);
+  box-shadow: 0 2px 8px rgba(26, 136, 112, 0.4);
+}
+
+[data-theme='dark'] .performanceDetails .security-badge {
+  background: linear-gradient(45deg, #4A90E2, #74B9FF);
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.4);
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+/* Dark mode button improvements */
+[data-theme='dark'] .button--primary {
+  background: var(--simpleenvs-gradient);
+  color: white;
+}
+
+[data-theme='dark'] .button--outline {
+  border-color: var(--simpleenvs-performance);
+  color: var(--simpleenvs-performance);
+}
+
+[data-theme='dark'] .button--outline:hover {
+  background: var(--simpleenvs-performance);
+  color: white;
+}
+
+.installCommand {
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  display: inline-block;
+  backdrop-filter: blur(10px);
+}
+
+.installCommand code {
+  color: #FFD700;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background: transparent;
+  padding: 0;
+}
+
+/* 코드 비교 섹션 */
+.codeComparison {
+  background-color: #f8f9fa;
+  padding: 4rem 0;
+}
+
+[data-theme='dark'] .codeComparison {
+  background-color: #1a1a1a;
+}
+
+.sectionSubtitle {
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
+  color: var(--simpleenvs-text-light);
+}
+
+.beforeTitle {
+  color: #dc3545;
+  margin-bottom: 1rem;
+}
+
+.afterTitle {
+  color: #28a745;
+  margin-bottom: 1rem;
+}
+
+.secureTitle {
+  color: var(--simpleenvs-primary);
+  margin-bottom: 1.5rem;
+}
+
+.codeBlock {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1.5rem;
+  border-radius: 8px;
+  font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #333;
+}
+
+.codeBlockLarge {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding: 2rem;
+  border-radius: 12px;
+  font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+  font-size: 1rem;
+  margin: 2rem auto;
+  overflow-x: auto;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--simpleenvs-primary);
+  max-width: 800px;
+}
+
+/* Dark mode code block improvements */
+[data-theme='dark'] .codeBlock,
+[data-theme='dark'] .codeBlockLarge {
+  background: #0d1117;
+  border: 1px solid #21262d;
+}
+
+[data-theme='dark'] .codeBlockLarge {
+  border: 2px solid var(--simpleenvs-primary);
+}
+
+.codeBlock pre,
+.codeBlockLarge pre {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.codeBlock code,
+.codeBlockLarge code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* 벤치마크 섹션 */
+.benchmarkSection {
+  padding: 4rem 0;
+  background: #fff;
+}
+
+[data-theme='dark'] .benchmarkSection {
+  background: var(--ifm-background-color);
+}
+
+.tableContainer {
+  margin: 2rem 0;
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .tableContainer {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.benchmarkTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+[data-theme='dark'] .benchmarkTable {
+  background: var(--ifm-background-surface-color);
+}
+
+.benchmarkTable th {
+  background: var(--simpleenvs-gradient);
+  color: white;
+  padding: 1.2rem 1rem;
+  text-align: left;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.benchmarkTable td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--simpleenvs-border);
+  font-size: 0.95rem;
+}
+
+.benchmarkTable tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+[data-theme='dark'] .benchmarkTable tbody tr:hover {
+  background-color: #21262d;
+}
+
+.benchmarkTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.speedupCell {
+  font-weight: bold;
+  color: var(--simpleenvs-performance);
+  font-size: 1.1rem;
+}
+
+.benchmarkNote {
+  font-style: italic;
+  color: var(--simpleenvs-text-light);
+  margin-top: 2rem;
+}
+
+.benchmarkNote code {
+  background-color: #f1f3f4;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #d73a49;
+}
+
+[data-theme='dark'] .benchmarkNote code {
+  background-color: #21262d;
+  color: #ff7b72;
+}
+
+/* 보안 통계 섹션 */
+.securityStats {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+[data-theme='dark'] .securityStats {
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+}
+
+.statCard {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  height: 100%;
+}
+
+[data-theme='dark'] .statCard {
+  background: var(--ifm-background-surface-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+}
+
+.statNumber {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--simpleenvs-primary);
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+[data-theme='dark'] .statLabel {
+  color: #f0f6fc;
+}
+
+.statDescription {
+  font-size: 0.9rem;
+  color: var(--simpleenvs-text-light);
+}
+
+.securityBadges {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.securityBadges .security-badge {
+  display: inline-block;
+  background: linear-gradient(45deg, #2980B9, #3498DB);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  box-shadow: 0 3px 10px rgba(41, 128, 185, 0.3);
+  transition: transform 0.3s ease;
+}
+
+[data-theme='dark'] .securityBadges .security-badge {
+  background: linear-gradient(45deg, #4A90E2, #74B9FF);
+  box-shadow: 0 3px 10px rgba(74, 144, 226, 0.4);
+}
+
+.securityBadges .security-badge:hover {
+  transform: translateY(-2px);
+}
+
+/* Dark mode navbar improvements */
+[data-theme='dark'] .navbar {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Dark mode navbar toggle button */
+.navbar__toggle {
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  padding: 8px;
+}
+
+.navbar__toggle:hover {
+  background: var(--simpleenvs-gradient);
+  transform: scale(1.1);
+}
+
+/* Dark mode text improvements */
+[data-theme='dark'] h1,
+[data-theme='dark'] h2,
+[data-theme='dark'] h3,
+[data-theme='dark'] h4,
+[data-theme='dark'] h5,
+[data-theme='dark'] h6 {
+  color: #f0f6fc;
+}
+
+/* Dark mode footer improvements */
+[data-theme='dark'] .footer {
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+  border-top: 1px solid var(--simpleenvs-border);
+}
+
+/* Dark mode scrollbar improvements */
+[data-theme='dark'] ::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: var(--simpleenvs-performance);
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background: var(--ifm-color-primary-lighter);
+}
+
+/* Dark mode selection styling */
+[data-theme='dark'] ::selection {
+  background: var(--simpleenvs-performance);
+  color: white;
+}
+
+/* Dark mode code highlighting improvements */
+[data-theme='dark'] .prism-code {
+  background: #0d1117 !important;
+  border: 1px solid #21262d;
+}
+
+[data-theme='dark'] .token.comment {
+  color: #8b949e;
+}
+
+[data-theme='dark'] .token.string {
+  color: #a5d6ff;
+}
+
+[data-theme='dark'] .token.keyword {
+  color: #ff7b72;
+}
+
+[data-theme='dark'] .token.function {
+  color: #d2a8ff;
+}
+
+/* System dark mode detection */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --hint-color: var(--simpleenvs-performance);
+  }
+}
+
+/* 반응형 디자인 업데이트 */
+@media screen and (max-width: 996px) {
+  .performanceHighlight {
+    font-size: 1.8rem;
+  }
+
+  .performanceDetails {
+    gap: 0.5rem;
+  }
+
+  .performanceDetails .performance-badge,
+  .performanceDetails .security-badge {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+  }
+
+  .securityStats {
+    padding: 2rem 0;
+  }
+
+  .statCard {
+    margin-bottom: 1rem;
+  }
+
+  .statNumber {
+    font-size: 2.5rem;
+  }
+
+  .securityBadges {
+    gap: 0.5rem;
+  }
+
+  .securityBadges .security-badge {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .installCommand {
+    margin: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .installCommand code {
+    font-size: 1rem;
+  }
+
+  .tableContainer {
+    margin: 1rem -1rem;
+  }
+
+  .benchmarkTable {
+    margin: 0;
+  }
+
+  .sectionSubtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+}

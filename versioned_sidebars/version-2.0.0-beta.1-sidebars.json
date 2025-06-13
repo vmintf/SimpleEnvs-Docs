@@ -1,0 +1,24 @@
+{
+  "tutorialSidebar": [
+    {
+      "type": "doc",
+      "id": "installation",
+      "label": "📦 Installation"
+    },
+    {
+      "type": "doc",
+      "id": "quickstart",
+      "label": "🚀 Quick Start"
+    },
+    {
+      "type": "doc",
+      "id": "api-reference",
+      "label": "📖 API Reference"
+    },
+    {
+      "type": "doc",
+      "id": "security",
+      "label": "🔒 Security Guide"
+    }
+  ]
+}
