@@ -422,7 +422,7 @@ jobs:
         if [[ -z "$SITE_URL" ]]; then
           REPO_NAME="${{ github.repository }}"
           OWNER="${{ github.repository_owner }}"
-          SITE_URL="https://${OWNER}.github.io/${REPO_NAME##*/}"
+          SITE_URL="https://simpleenvs.skystarry.xyz"
           echo "⚠️  Using fallback URL: $SITE_URL"
         fi
         
