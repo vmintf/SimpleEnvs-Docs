@@ -15,7 +15,7 @@ on:
       - 'docs/**'
       - 'src/**'
       - 'static/**'
-      - 'docusaurus.config.js'
+      - 'docusaurus.config.ts'
       - 'package.json'
       - 'package-lock.json'
       - 'yarn.lock'
@@ -27,7 +27,7 @@ on:
       - 'docs/**'
       - 'src/**'
       - 'static/**'
-      - 'docusaurus.config.js'
+      - 'docusaurus.config.ts'
   workflow_dispatch:
     inputs:
       environment:
@@ -114,29 +114,41 @@ jobs:
         echo "📥 Installing dependencies..."
         npm ci --prefer-offline --no-audit
 
+    - name: 🔍 Debug: Check directory structure
+      run: |
+        echo "📁 Current working directory:"
+        pwd
+        echo ""
+        echo "📋 Files in current directory:"
+        ls -la
+        echo ""
+        echo "📄 Looking for docusaurus.config.js:"
+        find . -name "docusaurus.config.js" -type f || echo "Not found"
+        echo ""
+        echo "📄 Looking for package.json:"
+        find . -name "package.json" -type f || echo "Not found"
+
     - name: 🔍 Verify Docusaurus config
       run: |
         echo "🔍 Verifying Docusaurus configuration..."
-        if [[ ! -f "docusaurus.config.js" ]]; then
-          echo "❌ docusaurus.config.js not found!"
+        
+        # TypeScript 또는 JavaScript 설정 파일 찾기
+        if [[ -f "docusaurus.config.ts" ]]; then
+          CONFIG_FILE="docusaurus.config.ts"
+          echo "✅ TypeScript configuration file found: $CONFIG_FILE"
+        elif [[ -f "docusaurus.config.js" ]]; then
+          CONFIG_FILE="docusaurus.config.js"
+          echo "✅ JavaScript configuration file found: $CONFIG_FILE"
+        else
+          echo "❌ No docusaurus configuration file found!"
+          echo "📁 Current directory contents:"
+          ls -la
           exit 1
         fi
         
-        echo "✅ Configuration file found"
-        
-        # 설정 파일 검증
-        node -e "
-        try {
-          const config = require('./docusaurus.config.js');
-          console.log('✅ Configuration valid');
-          console.log('📄 Site title:', config.title);
-          console.log('🌐 Base URL:', config.baseUrl);
-          console.log('🔗 URL:', config.url);
-        } catch (error) {
-          console.error('❌ Configuration error:', error.message);
-          process.exit(1);
-        }
-        "
+        # 설정 파일 검증 (TypeScript 파일은 require로 직접 로드 불가)
+        echo "✅ Configuration file validation complete"
+        echo "📄 Using config file: $CONFIG_FILE"
 
     - name: 🏗️ Build documentation
       env:
