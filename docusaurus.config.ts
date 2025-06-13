@@ -53,12 +53,7 @@ const config: Config = {
           showLastUpdateTime: true,
         },
 
-        blog: {
-          showReadingTime: true,
-          editUrl: 'https://github.com/vmintf/SimpleEnvs-Docs/tree/main/',
-          blogSidebarCount: 'ALL',
-          blogSidebarTitle: 'All Updates',
-        },
+        blog: false, // 블로그 비활성화
 
         theme: {
           customCss: './src/css/custom.css',
@@ -94,11 +89,12 @@ const config: Config = {
           position: 'left',
           label: 'Docs',
         },
-        {
-          to: '/blog',
-          label: 'Blog',
-          position: 'left'
-        },
+        // 블로그 항목 제거
+        // {
+        //   to: '/blog',
+        //   label: 'Blog',
+        //   position: 'left'
+        // },
         {
           type: 'docsVersionDropdown',
           position: 'right',
@@ -165,10 +161,11 @@ const config: Config = {
         {
           title: 'More',
           items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
+            // 블로그 항목 제거
+            // {
+            //   label: 'Blog',
+            //   to: '/blog',
+            // },
             {
               label: 'Changelog',
               href: 'https://github.com/vmintf/SimpleEnvs-Python/blob/main/CHANGELOG.md',
