@@ -72,7 +72,6 @@ jobs:
     timeout-minutes: 15
 
     outputs:
-      deployment-url: ${{ steps.deployment.outputs.page_url }}
       cache-hit: ${{ steps.cache.outputs.cache-hit }}
 
     outputs:
@@ -398,7 +397,7 @@ jobs:
         echo "🔍 Performing health check..."
         
         # GitHub Pages URL 가져오기
-        SITE_URL="${{ needs.deploy-github-pages.outputs.page_url }}"
+        SITE_URL="${{ steps.deployment.outputs.page_url }}"
         
         if [[ -z "$SITE_URL" ]]; then
           echo "⚠️  Deployment URL not available, skipping health check"
@@ -439,5 +438,5 @@ jobs:
       run: |
         echo "## 🏥 Health Check Results" >> $GITHUB_STEP_SUMMARY
         echo "**Check Time:** $(date)" >> $GITHUB_STEP_SUMMARY
-        echo "**Site URL:** ${{ needs.deploy-github-pages.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Site URL:** Available after deployment" >> $GITHUB_STEP_SUMMARY
         echo "**Status:** ${{ job.status == 'success' && '✅ Healthy' || '❌ Issues Detected' }}" >> $GITHUB_STEP_SUMMARY
