@@ -3,7 +3,7 @@ import type {Config} from '@docusaurus/types';
 import type {Options, ThemeConfig} from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'SimpleEnvs',
+  title: 'SimpleEnvs Python',
   tagline: 'Ultra-secure, high-performance .env file loader for Python',
   favicon: 'img/favicon.ico',
 

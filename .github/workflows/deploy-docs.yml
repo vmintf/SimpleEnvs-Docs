@@ -75,6 +75,9 @@ jobs:
       deployment-url: ${{ steps.deployment.outputs.page_url }}
       cache-hit: ${{ steps.cache.outputs.cache-hit }}
 
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
     - name: 📥 Checkout repository
       uses: actions/checkout@v4
@@ -88,7 +91,6 @@ jobs:
         cache: 'npm'  # 또는 'yarn'
 
     - name: 🔧 Setup Pages (GitHub Pages 배포시)
-      if: github.event.inputs.environment == 'github-pages' || (github.event.inputs.environment == '' && github.event_name == 'push')
       uses: actions/configure-pages@v4
 
     - name: 💾 Cache dependencies
@@ -204,7 +206,6 @@ jobs:
         done
 
     - name: 📤 Upload GitHub Pages artifact
-      if: github.event.inputs.environment == 'github-pages' || (github.event.inputs.environment == '' && github.event_name == 'push')
       uses: actions/upload-pages-artifact@v3
       with:
         path: build
@@ -242,7 +243,7 @@ jobs:
     if: |
       (github.event.inputs.environment == 'github-pages' || 
        (github.event.inputs.environment == '' && github.event_name == 'push')) &&
-      github.ref == 'refs/heads/main'
+      (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     timeout-minutes: 10
 
     environment:
@@ -388,7 +389,7 @@ jobs:
     name: Post-Deployment Health Check
     runs-on: ubuntu-latest
     needs: [deploy-github-pages]
-    if: success() && github.ref == 'refs/heads/main'
+    if: success() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     timeout-minutes: 5
 
     steps:
@@ -396,8 +397,8 @@ jobs:
       run: |
         echo "🔍 Performing health check..."
         
-        # GitHub Pages URL (실제 URL로 변경 필요)
-        SITE_URL="${{ needs.build.outputs.deployment-url }}"
+        # GitHub Pages URL 가져오기
+        SITE_URL="${{ needs.deploy-github-pages.outputs.page_url }}"
         
         if [[ -z "$SITE_URL" ]]; then
           echo "⚠️  Deployment URL not available, skipping health check"
@@ -438,5 +439,5 @@ jobs:
       run: |
         echo "## 🏥 Health Check Results" >> $GITHUB_STEP_SUMMARY
         echo "**Check Time:** $(date)" >> $GITHUB_STEP_SUMMARY
-        echo "**Site URL:** ${{ needs.build.outputs.deployment-url }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Site URL:** ${{ needs.deploy-github-pages.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
         echo "**Status:** ${{ job.status == 'success' && '✅ Healthy' || '❌ Issues Detected' }}" >> $GITHUB_STEP_SUMMARY
