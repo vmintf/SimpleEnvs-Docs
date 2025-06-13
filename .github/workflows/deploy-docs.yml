@@ -73,8 +73,6 @@ jobs:
 
     outputs:
       cache-hit: ${{ steps.cache.outputs.cache-hit }}
-
-    outputs:
       page_url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
