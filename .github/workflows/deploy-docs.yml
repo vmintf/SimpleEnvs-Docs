@@ -8,7 +8,7 @@ permissions:
 
 on:
   push:
-    branches:
+    branches: 
       - main
       - develop
     paths:
@@ -21,7 +21,7 @@ on:
       - 'yarn.lock'
       - '.github/workflows/deploy-docs.yml'
   pull_request:
-    branches:
+    branches: 
       - main
     paths:
       - 'docs/**'
@@ -101,7 +101,7 @@ jobs:
           node_modules
           .docusaurus
           ~/.npm
-        key: ${{ runner.os }}-docusaurus-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-docusaurus-${{ hashFiles('package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-docusaurus-
 
@@ -154,7 +154,7 @@ jobs:
         start_time=$(date +%s)
         
         # Docusaurus 빌드 실행
-        npm run build -- --out-dir build
+        npm run build
         
         # 빌드 완료 시간 계산
         end_time=$(date +%s)
