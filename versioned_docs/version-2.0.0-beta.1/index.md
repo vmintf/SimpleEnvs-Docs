@@ -1,32 +1,25 @@
-
+---
+id: introduce
+title: Introduce
+sidebar_label: Introduce
+sidebar_position: 1
+description: Complete API reference for SimpleEnvs functions and classes
+keywords: [simpleenvs, simpleenvs-python, api, reference, documentation, functions]
+---
 
 # SimpleEnvs Documentation
 
 Welcome to SimpleEnvs - the ultra-secure, high-performance .env file loader for Python!
 
-```{eval-rst}
-.. |version| replace:: |release|
+![PyPI - Version](https://img.shields.io/pypi/v/simpleenvs-python?label=PyPI%20Package)
+[![Python](https://img.shields.io/pypi/pyversions/simpleenvs-python.svg)](https://pypi.org/project/simpleenvs-python/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![PyPI Downloads](https://static.pepy.tech/badge/simpleenvs-python)](https://pepy.tech/projects/simpleenvs-python)
 
-.. image:: https://badge.fury.io/py/simpleenvs-python.svg
-   :target: https://badge.fury.io/py/simpleenvs-python
-   :alt: PyPI version
+[![CI Pipeline](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/ci.yml/badge.svg)](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/ci.yml)
+[![Performance Benchmark](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/benchmark.yml/badge.svg)](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/benchmark.yml)
+[![Security Vulnerability Tests](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/security_tests.yml/badge.svg)](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/security_tests.yml)
 
-.. image:: https://img.shields.io/pypi/pyversions/simpleenvs-python.svg
-   :target: https://pypi.org/project/simpleenvs-python/
-   :alt: Python versions
-
-.. image:: https://img.shields.io/badge/license-MIT-blue.svg
-   :target: https://github.com/vmintf/SimpleEnvs-Python/blob/main/LICENSE
-   :alt: License
-
-.. image:: https://img.shields.io/badge/version-|release|-blue.svg
-   :target: https://github.com/vmintf/SimpleEnvs-Python/releases
-   :alt: Current Version
-
-.. image:: https://img.shields.io/badge/security-enterprise%20grade-green.svg
-   :target: https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/security_tests.yml
-   :alt: Security Grade
-```
 > ⚠️ **Beta Documentation**: This is documentation for SimpleEnvs v2.0.0-beta.1
 > 
 > For stable v1.1.4 documentation, see: [v1.1.4 docs](https://github.com/vmintf/SimpleEnvs-Python/tree/v1.1.4/docs)

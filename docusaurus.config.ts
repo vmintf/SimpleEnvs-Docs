@@ -36,12 +36,12 @@ const config: Config = {
           versions: {
             current: {
               label: '1.1.4 (Stable)',
-              path: '/',
+              path: '/stable',
               banner: 'none',
             },
             '2.0.0-beta.1': {
               label: '2.0.0-beta.1 (Beta)',
-              path: '/beta/',
+              path: '/beta',
               banner: 'unreleased',
             },
           },
@@ -85,7 +85,7 @@ const config: Config = {
       items: [
         {
           type: 'doc',
-          docId: 'installation',
+          docId: 'introduce', // index 대신 introduce로 변경
           position: 'left',
           label: 'Docs',
         },

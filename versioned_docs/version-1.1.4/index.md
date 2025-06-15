@@ -1,3 +1,12 @@
+---
+id: introduce
+title: Introduce
+sidebar_label: Introduce
+sidebar_position: 1
+description: Complete API reference for SimpleEnvs functions and classes
+keywords: [simpleenvs, simpleenvs-python, api, reference, documentation, functions]
+---
+
 # SimpleEnvs Documentation
 
 
@@ -5,6 +14,10 @@
 [![Python](https://img.shields.io/pypi/pyversions/simpleenvs-python.svg)](https://pypi.org/project/simpleenvs-python/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PyPI Downloads](https://static.pepy.tech/badge/simpleenvs-python)](https://pepy.tech/projects/simpleenvs-python)
+
+[![CI Pipeline](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/ci.yml/badge.svg)](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/ci.yml)
+[![Performance Benchmark](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/benchmark.yml/badge.svg)](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/benchmark.yml)
+[![Security Vulnerability Tests](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/security_tests.yml/badge.svg)](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/security_tests.yml)
 
 > **Ultra-secure, high-performance .env file loader for Python**  
 > *Simple to use, enterprise-grade security, 2-4x faster performance*

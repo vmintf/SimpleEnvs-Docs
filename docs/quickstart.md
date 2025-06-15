@@ -1,3 +1,12 @@
+---
+id: quickstart
+title: Quick Start Guide
+sidebar_label: Quick Start
+sidebar_position: 3
+description: Get up and running with SimpleEnvs in 5 minutes
+keywords: [simpleenvs, simpleenvs-python, installation, python, env, dotenv, pip]
+---
+
 # Quick Start Guide
 
 Get up and running with SimpleEnvs in 5 minutes! 🚀

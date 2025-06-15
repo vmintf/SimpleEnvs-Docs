@@ -1,3 +1,12 @@
+---
+id: api-reference
+title: API Reference
+sidebar_label: API Reference
+sidebar_position: 4
+description: Complete API reference for SimpleEnvs functions and classes
+keywords: [simpleenvs, simpleenvs-python, api, reference, documentation, functions]
+---
+
 # API Reference
 
 Complete reference for all SimpleEnvs functions and classes.

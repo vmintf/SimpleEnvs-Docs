@@ -1,3 +1,11 @@
+---
+id: installation
+title: Installation Guide
+sidebar_label: Installation
+sidebar_position: 2
+description: Install SimpleEnvs - Ultra-secure, high-performance .env file loader for Python
+keywords: [simpleenvs, simpleenvs-python, installation, python, env, dotenv, pip]
+---
 # Installation Guide
 
 ## Requirements
@@ -210,7 +218,6 @@ pip install simpleenvs-python
 ## Docker Installation
 
 ### Dockerfile
-
 ```dockerfile
 FROM python:3.9-slim
 
@@ -219,7 +226,7 @@ WORKDIR /app
 # Install SimpleEnvs
 RUN pip install simpleenvs-python
 
-COPY version-1.1.4 .
+COPY . .
 
 CMD ["python", "app.py"]
 ```

@@ -2,6 +2,11 @@
   "tutorialSidebar": [
     {
       "type": "doc",
+      "id": "introduce",
+      "label": "📄 Introduce"
+    },
+    {
+      "type": "doc",
       "id": "installation",
       "label": "📦 Installation"
     },

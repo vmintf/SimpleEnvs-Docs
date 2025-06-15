@@ -2,7 +2,7 @@
 id: security
 title: Security Guide
 sidebar_label: Security
-sidebar_position: 4
+sidebar_position: 5
 description: Enterprise-grade security features and best practices
 keywords: [simpleenvs, simpleenvs-python, security, enterprise, memory isolation, protection]
 ---

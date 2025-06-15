@@ -5,6 +5,11 @@ const sidebars: SidebarsConfig = {
   tutorialSidebar: [
     {
       type: 'doc',
+      id: 'introduce',
+      label: '📄 Introduce'
+    },
+    {
+      type: 'doc',
       id: 'installation',
       label: '📦 Installation',
     },
@@ -23,40 +28,6 @@ const sidebars: SidebarsConfig = {
       id: 'security',
       label: '🔒 Security Guide',
     },
-
-    // 향후 확장 가능한 섹션들
-    // {
-    //   type: 'category',
-    //   label: '🏗️ Advanced Usage',
-    //   collapsed: false,
-    //   items: [
-    //     'performance',
-    //     'best-practices',
-    //     'troubleshooting',
-    //   ],
-    // },
-
-    // {
-    //   type: 'category',
-    //   label: '🔧 Framework Integration',
-    //   collapsed: true,
-    //   items: [
-    //     'examples/fastapi',
-    //     'examples/django',
-    //     'examples/flask',
-    //   ],
-    // },
-
-    // {
-    //   type: 'category',
-    //   label: '🚀 v2.0.0 Beta',
-    //   collapsed: true,
-    //   items: [
-    //     'beta/whats-new',
-    //     'beta/migration-guide',
-    //     'beta/testing',
-    //   ],
-    // },
   ],
 };
 
