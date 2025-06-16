@@ -125,19 +125,19 @@ const config: Config = {
           items: [
             {
               label: 'Installation',
-              to: '/docs/installation',
+              to: '/docs/stable/installation',
             },
             {
               label: 'Quick Start',
-              to: '/docs/quickstart',
+              to: '/docs/stable/quickstart',
             },
             {
               label: 'API Reference',
-              to: '/docs/api-reference',
+              to: '/docs/stable/api-reference',
             },
             {
               label: 'Security Guide',
-              to: '/docs/security',
+              to: '/docs/stable/security',
             },
           ],
         },
