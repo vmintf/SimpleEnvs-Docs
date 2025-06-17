@@ -39,15 +39,15 @@ const config: Config = {
               path: '/stable',
               banner: 'none',
             },
-            '2.0.0-beta.1': {
-              label: '2.0.0-beta.1 (Beta)',
+            '2.0.0-beta.2': {
+              label: '2.0.0-beta.2 (Beta)',
               path: '/beta',
               banner: 'unreleased',
             },
           },
 
           // 베타 버전도 포함
-          onlyIncludeVersions: ['current', '2.0.0-beta.1'],
+          onlyIncludeVersions: ['current', '2.0.0-beta.2'],
 
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
@@ -67,7 +67,7 @@ const config: Config = {
     announcementBar: {
       id: 'v2_beta_announcement',
       content:
-          '🚧 <strong>v2.0.0-beta.1</strong> is now available for testing! <a target="_blank" href="https://github.com/vmintf/SimpleEnvs-Python/releases/tag/v2.0.0-beta.1">Try beta version</a>',
+          '🚧 <strong>v2.0.0-beta.2</strong> is now available for testing! <a target="_blank" href="https://github.com/vmintf/SimpleEnvs-Python/releases/tag/v2.0.0-beta.2">Try beta version</a>',
       backgroundColor: '#ffeaa7',
       textColor: '#2d3436',
       isCloseable: true,
@@ -99,6 +99,11 @@ const config: Config = {
           type: 'docsVersionDropdown',
           position: 'right',
           dropdownActiveClassDisabled: true,
+        },
+        {
+          position: 'right',
+          label: 'Official Discord',
+          href: 'https://discord.gg/QV6ux4mQ8h'
         },
         {
           href: 'https://github.com/vmintf/SimpleEnvs-Python',
@@ -168,11 +173,11 @@ const config: Config = {
             // },
             {
               label: 'Changelog',
-              href: 'https://github.com/vmintf/SimpleEnvs-Python/blob/main/CHANGELOG.md',
+              href: 'https://github.com/vmintf/SimpleEnvs-Python/releases',
             },
             {
               label: 'Benchmark',
-              href: 'https://github.com/vmintf/SimpleEnvs-Python/tree/main/benchmark.py',
+              href: 'https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/benchmark.yml',
             },
           ],
         },

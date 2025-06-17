@@ -286,7 +286,7 @@ After successful installation:
 1. 📖 Read the [Quick Start Guide](quickstart.md)
 2. 🔍 Explore [API Reference](api-reference.md)
 3. 🔒 Learn about [Security Features](security.md)
-4. 🚀 Check out [examples/](../examples/)
+4. 🚀 Check out [examples/](https://github.com/vmintf/SimpleEnvs-Python/blob/main/examples)
 
 ## Getting Help
 

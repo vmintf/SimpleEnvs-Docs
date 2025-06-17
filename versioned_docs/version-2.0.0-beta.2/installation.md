@@ -31,7 +31,7 @@ pip install simpleenvs-python
 
 Add to your `requirements.txt`:
 ```
-simpleenvs-python>=2.0.0
+simpleenvs-python==2.0.0b2
 ```
 
 Then install:
@@ -347,7 +347,7 @@ After successful installation:
 1. 📖 Read the [Quick Start Guide](quickstart.md)
 2. 🔍 Explore [API Reference](api-reference.md)
 3. 🔒 Learn about [Security Features](security.md)
-4. 🚀 Check out [examples/](../examples/)
+4. 🚀 Check out [examples/](https://github.com/vmintf/SimpleEnvs-Python/blob/main/examples)
 
 ## Getting Help
 

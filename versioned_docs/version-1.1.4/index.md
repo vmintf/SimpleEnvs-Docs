@@ -12,7 +12,7 @@ keywords: [simpleenvs, simpleenvs-python, api, reference, documentation, functio
 
 ![PyPI - Version](https://img.shields.io/pypi/v/simpleenvs-python?label=PyPI%20Package)
 [![Python](https://img.shields.io/pypi/pyversions/simpleenvs-python.svg)](https://pypi.org/project/simpleenvs-python/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vmintf/SimpleEnvs-Python/blob/main/LICENSE)
 [![PyPI Downloads](https://static.pepy.tech/badge/simpleenvs-python)](https://pepy.tech/projects/simpleenvs-python)
 
 [![CI Pipeline](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/ci.yml/badge.svg)](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/ci.yml)
@@ -476,7 +476,7 @@ SimpleEnvs shines in practical scenarios:
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see [CONTRIBUTING.md](Contributing.md) for guidelines.
+We welcome contributions! Please see [CONTRIBUTING.md](https://github.com/vmintf/SimpleEnvs-Python/blob/main/Contributing.md) for guidelines.
 
 ### Development Setup
 ```bash
@@ -497,7 +497,7 @@ isort src/ tests/
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](https://github.com/vmintf/SimpleEnvs-Python/blob/main/LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
