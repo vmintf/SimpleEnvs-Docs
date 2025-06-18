@@ -9,20 +9,21 @@ keywords: [simpleenvs, simpleenvs-python, api, reference, documentation, functio
 
 # SimpleEnvs API Reference
 
-Complete reference for all SimpleEnvs functions and classes with latest updates.
+Complete reference for all SimpleEnvs functions and classes with **Beta.2 updates**.
 
 ## Table of Contents
 
 - [Loading Functions](#loading-functions)
 - [Simple API (System Environment)](#simple-api-system-environment)
 - [Secure API (Memory-Isolated)](#secure-api-memory-isolated)
-- [SecureLoaderManager (NEW!)](#secureloadermanager-new)
+- [SecureLoaderManager](#secureloadermanager)
 - [Type-Safe Getters](#type-safe-getters)
 - [Utility Functions](#utility-functions)
 - [Performance & Benchmarking](#performance--benchmarking)
 - [Classes](#classes)
 - [Exceptions](#exceptions)
 - [Constants](#constants)
+- [Beta.2 Changes](#beta2-changes)
 
 ---
 
@@ -53,10 +54,13 @@ One-liner to load .env file asynchronously.
 
 **Returns:** None
 
+**🔄 Beta.2 Changes:** Now uses `simpleenvs.load()` internally for better consistency.
+
 **Example:**
 ```python
 from simpleenvs import aload_dotenv
 await aload_dotenv()
+await aload_dotenv('.env.development')
 ```
 
 ### `load_dotenv_secure(path=None, strict=True)`
@@ -73,6 +77,31 @@ One-liner to load .env file with maximum security (memory-isolated).
 ```python
 from simpleenvs import load_dotenv_secure
 load_dotenv_secure()  # Maximum security!
+load_dotenv_secure('.env.production', strict=True)
+```
+
+### `load_dotenv_secure_async(path=None, strict=True)` 🆕
+
+**NEW in Beta.2:** One-liner to load .env file with maximum security asynchronously.
+
+**Parameters:**
+- `path` (str, optional): Path to .env file, or None for auto-discovery
+- `strict` (bool): Enable strict security validation
+
+**Returns:** None
+
+**Example:**
+```python
+from simpleenvs import load_dotenv_secure_async
+
+# Async secure loading
+await load_dotenv_secure_async()  
+await load_dotenv_secure_async('.env.production', strict=True)
+
+# FastAPI integration
+@app.on_event("startup")
+async def startup():
+    await load_dotenv_secure_async()
 ```
 
 ---
@@ -213,6 +242,29 @@ await simpleenvs.load_secure()
 await simpleenvs.load_secure('.env.secrets', strict=True)
 ```
 
+### `load_secure_async(path=None, strict=True, max_depth=2)` 🆕
+
+**NEW in Beta.2:** Load environment variables using SecureEnvLoader asynchronously.
+
+**Parameters:**
+- `path` (str, optional): Specific .env file path, or None for auto-discovery
+- `strict` (bool): Enable strict security validation
+- `max_depth` (int): Maximum directory depth to search for .env files
+
+**Returns:** None
+
+**Example:**
+```python
+# Direct async secure loading
+await simpleenvs.load_secure_async()
+await simpleenvs.load_secure_async('.env.secrets', strict=True, max_depth=1)
+
+# Production async pattern
+async def startup():
+    await simpleenvs.load_secure_async('.env.production', strict=True)
+    print("🔒 Secure environment loaded")
+```
+
 ### `get_secure(key, default=None)`
 
 Get secure environment variable (memory-isolated, NOT in os.environ).
@@ -296,17 +348,16 @@ Get security information from secure loader.
 **Example:**
 ```python
 info = simpleenvs.get_security_info()
-print(f"Session ID: {info['session_id']}")
-print(f"Access count: {info['access_count']}")
+if info:
+    print(f"Session ID: {info['session_id']}")
+    print(f"Access count: {info['access_count']}")
 ```
 
 ---
 
-## SecureLoaderManager (NEW!)
+## SecureLoaderManager
 
-**🆕 Enhanced cross-module access with pythonic interface**
-
-The SecureLoaderManager provides intelligent management of SecureEnvLoader instances across your application with magic method support.
+The SecureLoaderManager provides intelligent management of SecureEnvLoader instances across your application with pythonic interface.
 
 ### `get_all_secure_loaders()`
 
@@ -354,27 +405,6 @@ for loader in simpleenvs._secure_manager:
     print(f"Loader session: {info['session_id']}")
 ```
 
-### Cross-Module Access
-
-Enhanced automatic discovery across modules:
-
-```python
-# main.py - Load secrets once
-import simpleenvs
-await simpleenvs.load_secure('.env.production')
-
-# utils.py - Automatic access anywhere!
-import simpleenvs
-api_key = simpleenvs.get_secure('API_KEY')  # Works automatically!
-```
-
-### Memory Management
-
-The manager intelligently handles:
-- **Priority Resolution**: Global loader → Memory introspection → None
-- **Automatic Cleanup**: Weak references prevent memory leaks
-- **Session Tracking**: Multiple loaders with unique session IDs
-
 ---
 
 ## Type-Safe Getters
@@ -396,13 +426,6 @@ All getter functions support automatic type conversion with validation:
 
 - All values can be converted to strings
 - UTF-8 encoding validation in strict mode
-
-### Performance Optimizations
-
-Type conversion is now optimized with:
-- **Batch processing** for large .env files
-- **Caching** for repeated access
-- **Early validation** during file parsing
 
 ---
 
@@ -456,10 +479,6 @@ print(f"Secure loaders in memory: {info['secure_loaders_in_memory']}")
 
 ## Performance & Benchmarking
 
-**🚀 New performance monitoring and benchmarking tools**
-
-### Built-in Benchmarking
-
 SimpleEnvs includes comprehensive benchmarking tools:
 
 ```python
@@ -486,26 +505,10 @@ import simpleenvs
 
 # Measure loading time
 start = time.perf_counter()
-await simpleenvs.load_secure('large_config.env')
+await simpleenvs.load_secure_async('large_config.env')  # 🆕 Beta.2
 load_time = (time.perf_counter() - start) * 1000
 
-print(f"Secure loading took: {load_time:.2f}ms")
-```
-
-### Security Performance Analysis
-
-The secure API includes performance monitoring:
-
-```python
-# Get security info with performance metrics
-info = simpleenvs.get_security_info()
-print(f"Access count: {info['access_count']}")
-print(f"Creation time: {info['creation_time']}")
-
-# Access log for performance analysis
-access_log = simpleenvs.get_all_secure_loaders()[0].get_access_log()
-for entry in access_log[-5:]:  # Last 5 accesses
-    print(f"{entry['operation']}: {entry['timestamp']}")
+print(f"Async secure loading took: {load_time:.2f}ms")
 ```
 
 ---
@@ -598,7 +601,7 @@ info = loader.get_security_info()
 print(f"Access count: {info['access_count']}")
 ```
 
-### `SecureLoaderManager` (NEW!)
+### `SecureLoaderManager`
 
 Intelligent manager for SecureEnvLoader instances with pythonic interface.
 
@@ -652,11 +655,6 @@ Configuration options for secure loading with enhanced validation.
 - `max_depth` (int): Maximum search depth  
 - `strict_validation` (bool): Enable strict validation
 
-**Enhanced validation includes:**
-- Batch content security scanning
-- Optimized path traversal detection
-- Performance-aware file size limits
-
 **Example:**
 ```python
 from simpleenvs.secure import LoadOptions
@@ -673,7 +671,7 @@ await loader.load_secure(options)
 
 ## Exceptions
 
-All exceptions remain the same with enhanced error reporting:
+All exceptions with enhanced error reporting:
 
 ### Core Exceptions
 
@@ -701,7 +699,7 @@ All exceptions remain the same with enhanced error reporting:
 **Enhanced Error Handling:**
 ```python
 try:
-    await simpleenvs.load_secure('config.env')
+    await simpleenvs.load_dotenv_secure_async('config.env')  # 🆕 Beta.2
 except simpleenvs.FileSizeError as e:
     print(f"File too large: {e.size} bytes (max: {e.max_size})")
 except simpleenvs.PathTraversalError as e:
@@ -716,11 +714,11 @@ except simpleenvs.SimpleEnvsError as e:
 
 ### Version Information
 
-- `__version__`: Library version string (currently 1.1.4)
+- `__version__`: Library version string (currently 2.0.0-beta.2)
 - `VERSION`: Same as __version__
 - `API_VERSION`: API version
 
-### Security Limits (Enhanced)
+### Security Limits
 
 - `MAX_FILE_SIZE`: 10MB maximum file size
 - `MAX_KEY_LENGTH`: 128 characters maximum key length
@@ -729,7 +727,7 @@ except simpleenvs.SimpleEnvsError as e:
 - `MAX_ENTRIES_PER_DIRECTORY`: 10,000 entries per directory
 - `MAX_ACCESS_LOG_ENTRIES`: 100 access log entries (memory management)
 
-### Performance Constants (NEW!)
+### Performance Constants
 
 - `READ_BUFFER_SIZE`: 8KB buffer for file reading
 - `HASH_BUFFER_SIZE`: 4KB buffer for integrity hashing
@@ -751,73 +749,125 @@ print(f"Max file size: {simpleenvs.MAX_FILE_SIZE}")
 
 ---
 
-## Migration Guide
+## Beta.2 Changes
 
-### From v1.1.4 to v2.0.0
+### 🆕 New Functions
 
-**✅ Fully Backward Compatible** - No breaking changes!
-
-**New Features:**
 ```python
-# NEW: SecureLoaderManager with magic methods
-if simpleenvs._secure_manager:
-    secret = simpleenvs._secure_manager['SECRET_KEY']
-
-# NEW: Enhanced performance monitoring
-info = simpleenvs.get_info()
-loader_count = info['secure_loaders_in_memory']
-
-# NEW: Built-in benchmarking
-python -m simpleenvs.benchmark --secure --quick
+# New async secure functions
+await simpleenvs.load_secure_async(path=None, strict=True, max_depth=2)
+await simpleenvs.load_dotenv_secure_async(path=None, strict=True)
 ```
 
-**Performance Improvements:**
-- 15-25% faster secure loading for large files
-- Batch security validation
-- Optimized memory introspection
-- Enhanced cross-module access
+### 🔄 Enhanced Functions
+
+```python
+# Enhanced implementation
+await simpleenvs.aload_dotenv(path=None)  # Now uses load() internally
+```
+
+### 📦 Updated __all__ Exports
+
+**Beta.2 adds the following exports:**
+
+```python
+__all__ = [
+    # ... existing exports ...
+    
+    # 🆕 New Beta.2 exports
+    "load_secure_async",           # Async secure loading (internal API)
+    "load_dotenv_secure_async",    # Async secure one-liner
+    
+    # 🔄 Enhanced exports (implementation improved)
+    "aload_dotenv",                # Better internal implementation
+]
+```
+
+### 🚀 Migration from Beta.1
+
+**Fully backward compatible** - no breaking changes!
+
+```python
+# ✅ All Beta.1 code works unchanged
+await simpleenvs.load_secure()
+await simpleenvs.aload_dotenv()
+
+# 🆕 New Beta.2 features
+await simpleenvs.load_secure_async()        # New dedicated async API
+await simpleenvs.load_dotenv_secure_async() # New async one-liner
+```
+
+### 🎯 Usage Patterns
+
+#### Before (Beta.1)
+```python
+# Sync secure loading only
+simpleenvs.load_dotenv_secure()
+
+# Async simple loading
+await simpleenvs.aload_dotenv()
+```
+
+#### After (Beta.2) 
+```python
+# Sync secure loading (unchanged)
+simpleenvs.load_dotenv_secure()
+
+# 🆕 Async secure loading (new!)
+await simpleenvs.load_dotenv_secure_async()
+
+# Enhanced async simple loading
+await simpleenvs.aload_dotenv()  # Better implementation
+```
+
+### 🔧 Internal Improvements
+
+1. **Better Async Consistency**: `aload_dotenv()` now uses `load()` internally
+2. **Dedicated Async Secure API**: Separate async functions for secure loading
+3. **Improved Error Handling**: Better async error propagation
+4. **Enhanced Performance**: Optimized async loading patterns
 
 ---
 
-## Best Practices (Updated)
+## Best Practices (Updated for Beta.2)
 
-### 1. Use Manager-Based Access
+### 1. Use Appropriate Async Functions
 
 ```python
-# ✅ Recommended: Let manager handle discovery
-import simpleenvs
-await simpleenvs.load_secure()
-secret = simpleenvs.get_secure('SECRET_KEY')  # Auto-discovery!
+# ✅ Recommended: Use dedicated async functions
+await simpleenvs.aload_dotenv()                # For simple loading
+await simpleenvs.load_dotenv_secure_async()    # For secure loading
 
-# ❌ Avoid: Manual loader management
-loader = SecureEnvLoader()
-await loader.load_secure()
-secret = loader.get_secure('SECRET_KEY')
+# ❌ Avoid: Mixing sync and async inconsistently
+simpleenvs.load_dotenv_secure()              # Sync
+await simpleenvs.aload_dotenv()               # Async - inconsistent!
 ```
 
-### 2. Monitor Performance
+### 2. Modern Web App Pattern
 
 ```python
-# ✅ Monitor large file loading
-info = simpleenvs.get_security_info()
-if info and info['access_count'] > 1000:
-    print("High access count - consider caching")
-
-# ✅ Use built-in benchmarking
-# python -m simpleenvs.benchmark --size 500 --secure
+# ✅ Modern FastAPI/async pattern
+@app.on_event("startup")
+async def startup():
+    # Load public config
+    await simpleenvs.aload_dotenv('.env.public')
+    
+    # Load secrets securely (new async API!)
+    await simpleenvs.load_dotenv_secure_async('.env.secrets')
 ```
 
-### 3. Environment-Specific Configuration
+### 3. Environment-Specific Async Loading
 
 ```python
-# ✅ Leverage environment detection
-import simpleenvs
+# ✅ Environment-aware async loading
+import os
 
-env_type = simpleenvs.get_environment_type()
-if env_type == 'production':
-    await simpleenvs.load_secure(strict=True)  # Max security
+env = os.getenv('ENVIRONMENT', 'development')
+
+if env == 'production':
+    await simpleenvs.load_dotenv_secure_async(f'.env.{env}', strict=True)
 else:
-    await simpleenvs.load()  # Development flexibility
+    await simpleenvs.aload_dotenv(f'.env.{env}')
 ```
 
 ---
@@ -850,5 +900,6 @@ SecureLoaderManager = simpleenvs.manager.SecureLoaderManager
 - 🔒 Learn about [Security Features](security.md) for enterprise-grade protection
 - ⚡ Explore [Performance Guide](performance.md) for optimization tips
 - 🏗️ Check out [Best Practices](best-practices.md) for production patterns
+- 🆕 Read [Migration Guide](migration.md) for Beta.1 to Beta.2 migration
 
-*Updated for SimpleEnvs v1.1.4 with SecureLoaderManager and performance enhancements* 🚀
+*Updated for SimpleEnvs v2.0.0-beta.2 with enhanced async support* 🚀⚡

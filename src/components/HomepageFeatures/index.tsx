@@ -34,7 +34,7 @@ const FeatureList: FeatureItem[] = [
                 <p><strong>100% security tests passed</strong></p>
                 <ul className={styles.featureList}>
                     <li>Memory-isolated secure mode</li>
-                    <li>51 comprehensive security tests</li>
+                    <li>16 comprehensive security tests</li>
                     <li>Path traversal protection</li>
                     <li>Input validation & sanitization</li>
                 </ul>

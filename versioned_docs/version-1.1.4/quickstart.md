@@ -311,7 +311,7 @@ Add to `.vscode/settings.json`:
 - 📖 [API Reference](api-reference.md) - Complete function documentation
 - 🔒 [Security Guide](security.md) - Advanced security features
 - 🏗️ [Best Practices](best-practices.md) - Production-ready patterns
-- 🔧 [Examples](../examples/) - Real-world usage examples
+- 🔧 [Examples](https://github.com/vmintf/SimpleEnvs-Python/blob/main/examples) - Real-world usage examples
 
 **Need help?**
 - 🐛 [Report issues](https://github.com/vmintf/SimpleEnvs-Python/issues)

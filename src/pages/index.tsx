@@ -130,16 +130,16 @@ function SecurityStats(): ReactNode {
                 <div className="text--center">
                     <Heading as="h2">🛡️ Enterprise-Grade Security Validation</Heading>
                     <p className={styles.sectionSubtitle}>
-                        Comprehensive security testing with <strong>100% success rate</strong>
+                        Core security testing with <strong>100% success rate</strong>
                     </p>
                 </div>
 
                 <div className="row">
                     <div className="col col--4">
                         <div className={styles.statCard}>
-                            <div className={styles.statNumber}>51</div>
+                            <div className={styles.statNumber}>16</div>
                             <div className={styles.statLabel}>Security Tests</div>
-                            <div className={styles.statDescription}>Comprehensive test coverage</div>
+                            <div className={styles.statDescription}>Core functionality focused</div>
                         </div>
                     </div>
 
@@ -160,6 +160,13 @@ function SecurityStats(): ReactNode {
                     </div>
                 </div>
 
+                {/* 작은 글씨로 핵심 테스트 설명 추가 */}
+                <div className="text--center" style={{marginTop: '1rem'}}>
+                    <p style={{fontSize: '0.85rem', color: '#666', fontStyle: 'italic'}}>
+                        Refined from 53 comprehensive tests to 16 essential core security validations
+                    </p>
+                </div>
+
                 <div className="text--center" style={{marginTop: '2rem'}}>
                     <div className={styles.securityBadges}>
                         <span className="security-badge">Path Traversal Protected</span>
@@ -172,6 +179,7 @@ function SecurityStats(): ReactNode {
         </section>
     );
 }
+
 function BenchmarkSection(): ReactNode {
     const benchmarkData = [
         { variables: '10 vars', fileSize: '482B', pythonDotenv: '1.96ms', simpleenvs: '0.16ms', speedup: '12.4x faster' },

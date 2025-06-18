@@ -24,6 +24,11 @@
       "type": "doc",
       "id": "security",
       "label": "🔒 Security Guide"
+    },
+    {
+      "type": "doc",
+      "id": "migration",
+      "label": "🎭 Migration Guide"
     }
   ]
 }
