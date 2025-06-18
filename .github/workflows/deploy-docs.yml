@@ -87,7 +87,7 @@ jobs:
         cache: 'npm'  # 또는 'yarn'
 
     - name: 🔧 Setup Pages (GitHub Pages 배포시)
-      uses: actions/configure-pages@v4
+      uses: actions/configure-pages@v5
 
     - name: 💾 Cache dependencies
       id: cache
