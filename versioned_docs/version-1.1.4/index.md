@@ -19,6 +19,8 @@ keywords: [simpleenvs, simpleenvs-python, api, reference, documentation, functio
 [![Performance Benchmark](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/benchmark.yml/badge.svg)](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/benchmark.yml)
 [![Security Vulnerability Tests](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/security_tests.yml/badge.svg)](https://github.com/vmintf/SimpleEnvs-Python/actions/workflows/security_tests.yml)
 
+⚠️ <strong>Support for Python version 3.7 will be dropped when this library releases v2.0.0.</strong>
+
 > **Ultra-secure, high-performance .env file loader for Python**  
 > *Simple to use, enterprise-grade security, 2-4x faster performance*
 
