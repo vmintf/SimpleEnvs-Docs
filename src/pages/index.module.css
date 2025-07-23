@@ -132,6 +132,7 @@ html {
   border-radius: 8px;
   display: inline-block;
   backdrop-filter: blur(10px);
+  border: none;
 }
 
 .installCommand code {
@@ -140,6 +141,7 @@ html {
   font-weight: bold;
   background: transparent;
   padding: 0;
+  border: none;
 }
 
 /* 코드 비교 섹션 */
