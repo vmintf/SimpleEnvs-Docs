@@ -76,7 +76,7 @@ jobs:
 
     steps:
     - name: 📥 Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0  # 전체 히스토리 (git-based last modified 지원)
 
@@ -321,7 +321,7 @@ jobs:
 
     steps:
     - name: 📥 Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: 📥 Download build artifacts
       uses: actions/download-artifact@v4
@@ -346,7 +346,7 @@ jobs:
 
     steps:
     - name: 📥 Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: 📦 Setup Node.js
       uses: actions/setup-node@v4
